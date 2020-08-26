@@ -5,6 +5,7 @@
     :hide-default-footer="hideDefaultFooter"
     :items-per-page="itemsPerPage"
     :dense="dense"
+    :mobile-breakpoint="250"
   />
 </template>
 

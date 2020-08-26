@@ -36,11 +36,14 @@ export default class LightCurvePlot extends Vue {
 
   @Emit('detectionClick')
   onClick(detection) {
-    const date = jdToDate(detection.value[0]).toUTCString().slice(0, -3) + 'UT'
+    const date =
+      jdToDate(detection.value[0])
+        .toUTCString()
+        .slice(0, -3) + 'UT'
     return {
       mjd: detection.value[0],
       date,
-      index: this.detections.findIndex((x) => x.mjd === detection.value[0]),
+      index: this.detections.findIndex(x => x.mjd === detection.value[0])
     }
   }
 
@@ -119,7 +122,7 @@ export default class LightCurvePlot extends Vue {
       if (field in obj) {
         obj[field].color = value
       }
-      Object.keys(obj).forEach((k) => f(obj[k]))
+      Object.keys(obj).forEach(k => f(obj[k]))
     }
     f(json)
     return field

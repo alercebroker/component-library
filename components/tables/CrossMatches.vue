@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="1">Max. distance</v-col>
-      <v-col cols="11">
+      <v-col md="1">Max. distance</v-col>
+      <v-col md="11">
         <v-slider v-model="distance" step="0.001" :min="0" :max="20">
           <template v-slot:append>
             <v-text-field
@@ -77,18 +77,18 @@ export default class CrossMatches extends Vue {
     {
       text: 'Attribute',
       value: 'field',
-      sortable: false,
+      sortable: false
     },
     {
       text: 'Value',
       value: 'value',
-      sortable: false,
+      sortable: false
     },
     {
       text: 'Unit',
       value: 'unit',
-      sortable: false,
-    },
+      sortable: false
+    }
   ]
 
   @Prop({ type: Array, required: true, default: () => [] })
@@ -98,7 +98,7 @@ export default class CrossMatches extends Vue {
     if (this.distance == null) {
       return this.catalogs
     } else {
-      return this.catalogs.filter((x) => this.distance >= x.distance.value)
+      return this.catalogs.filter(x => this.distance >= x.distance.value)
     }
   }
 }

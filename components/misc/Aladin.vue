@@ -12,7 +12,7 @@ import {
   Prop,
   Watch,
   Model,
-  Emit,
+  Emit
 } from 'nuxt-property-decorator'
 /**
  * Description of aladin
@@ -36,8 +36,8 @@ export default class Aladin extends Vue {
   mounted() {
     this.aladin = A.aladin('#aladin-lite-div', {
       survey: 'P/PanSTARRS/DR1/color-z-zg-g',
-      fov: 0.03,
-      cooFrame: 'J2000d',
+      fov: 0.02,
+      cooFrame: 'J2000d'
     })
     if (this.objects) {
       this.catalog = this.addObjects(this.aladin, this.objects)
@@ -45,7 +45,7 @@ export default class Aladin extends Vue {
     this.onSelectedObjectChange(this.selectedObject)
   }
 
-  @Emit('objectSelected')
+  // @Emit('objectSelected')
   onClick(object) {
     if (object) {
       return this.findZTFObject(object)
@@ -57,7 +57,7 @@ export default class Aladin extends Vue {
   }
 
   findZTFObject(object) {
-    return this.objects.find((x) => {
+    return this.objects.find(x => {
       return x.oid === object.data.name
     })
   }
@@ -101,12 +101,12 @@ export default class Aladin extends Vue {
   addObjects(aladin, objects) {
     aladin.removeLayers()
     const sources = []
-    objects.forEach((object) => {
+    objects.forEach(object => {
       sources.push(
         A.source(object.meanra, object.meandec, {
           name: object.oid,
           size: this.circleSize,
-          class: object[this.displayClass] ? object[this.displayClass] : '',
+          class: object[this.displayClass] ? object[this.displayClass] : ''
         })
       )
     })
@@ -124,18 +124,18 @@ export default class Aladin extends Vue {
     }
     this.aladin.addCatalog(
       A.catalogFromSimbad(coordinates, 0.014, {
-        onClick: 'showTable',
+        onClick: 'showTable'
       })
     )
     this.aladin.addCatalog(
       A.catalogFromNED(coordinates, 0.014, {
         onClick: 'showTable',
-        shape: 'plus',
+        shape: 'plus'
       })
     )
     this.aladin.addCatalog(
       A.catalogFromVizieR('I/311/hip2', coordinates, 0.014, {
-        onClick: 'showTable',
+        onClick: 'showTable'
       })
     )
   }
@@ -144,15 +144,15 @@ export default class Aladin extends Vue {
   onSelectedObjectChange(newObject) {
     const coordinates = {
       ra: newObject.meanra,
-      dec: newObject.meandec,
+      dec: newObject.meandec
     }
     this.addCatalogsInformation(coordinates)
-    const src = this.catalog.sources.find((source) => {
+    const src = this.catalog.sources.find(source => {
       return source.data.name === newObject.oid
     })
     this.aladinObject = src
     this.aladin.gotoRaDec(coordinates.ra, coordinates.dec)
-    this.aladin.setFov(0.1)
+    this.aladin.setFov(0.02)
   }
 
   @Watch('aladinObject')
@@ -168,5 +168,8 @@ export default class Aladin extends Vue {
   height: '100%';
   width: '100%';
   min-height: 350px;
+}
+.aladin-measurement-div {
+  background-color: transparent !important;
 }
 </style>

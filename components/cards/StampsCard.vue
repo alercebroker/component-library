@@ -1,11 +1,8 @@
 <template>
   <v-card flat>
-    <v-toolbar dense flat>
-      <v-row align="center">
-        <v-col cols="3">
-          <v-toolbar-title>Stamps</v-toolbar-title>
-        </v-col>
-        <v-col cols="5" class="mt-4">
+    <v-card-text class="pt-0 pb-0">
+      <v-row class="py-0">
+        <v-col cols="8" lg="10" class="py-0">
           <v-select
             :items="dates"
             item-value="index"
@@ -15,7 +12,7 @@
             @change="onDateSelected"
           ></v-select>
         </v-col>
-        <v-col cols="3">
+        <v-col class="text-center mt-lg-2" cols="4" lg="2">
           <v-icon data-test="prevIcon" @click="prevStamp"
             >mdi-arrow-left-drop-circle</v-icon
           >
@@ -23,30 +20,18 @@
             >mdi-arrow-right-drop-circle</v-icon
           >
         </v-col>
-        <v-spacer></v-spacer>
-        <v-col v-if="hasFullscreenListener" cols="1">
-          <v-icon @click="fullscreen">{{ fullscreenIcon }}</v-icon>
-        </v-col>
-        <v-col cols="1">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-icon v-on="on">mdi-information</v-icon>
-            </template>
-            <span
-              >Use the tool icons below to change between zoom or crosshair
-              modes</span
-            >
-          </v-tooltip>
-        </v-col>
       </v-row>
-    </v-toolbar>
-    <v-divider></v-divider>
-    <v-card-text>
-      <v-row justify="center">
+      <v-row justify="center" class="py-0">
         <v-col cols="4" class="py-0 text-center">
           <h5>
             Science
-            <v-btn x-small outlined color="primary" :href="download('science')">
+            <v-btn
+              x-small
+              outlined
+              class="d-none d-sm-flex"
+              color="primary"
+              :href="download('science')"
+            >
               <v-icon left small>mdi-cloud-download</v-icon>Download
             </v-btn>
           </h5>
@@ -58,6 +43,7 @@
               x-small
               outlined
               color="primary"
+              class="d-none d-sm-flex"
               :href="download('template')"
             >
               <v-icon left small>mdi-cloud-download</v-icon>Download
@@ -70,6 +56,7 @@
             <v-btn
               x-small
               outlined
+              class="d-none d-sm-flex"
               color="primary"
               :href="download('difference')"
             >
@@ -79,13 +66,13 @@
         </v-col>
       </v-row>
       <v-row class="pa-0">
-        <v-col v-if="stampComponent === 'zoom'" cols="12">
+        <v-col v-if="stampComponent === 'zoom'" class="py-0" cols="12">
           <alerce-zoom-on-hover
             :images="[science, template, difference]"
             :disabled="isFullscreen"
           ></alerce-zoom-on-hover>
         </v-col>
-        <v-col v-if="stampComponent === 'crosshair'" cols="12">
+        <v-col v-if="stampComponent === 'crosshair'" class="py-0" cols="12">
           <alerce-crosshair
             :images="[science, template, difference]"
             :fullscreen="isFullscreen"
@@ -93,19 +80,16 @@
           ></alerce-crosshair>
         </v-col>
       </v-row>
-      <v-row
-        align="start"
-        style="max-height: 20px;"
-        class="pa-0"
-        justify="center"
-      >
-        <v-col
-          v-for="tool in tools"
-          :key="tool.id"
-          style="max-height: 20px;"
-          cols="1"
-          class="pa-0"
-        >
+      <v-row align="start" class="pt-0" justify="center">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-icon class="px-3" v-on="on">mdi-information</v-icon>
+          </template>
+          <span
+            >Use the tool icons to change between zoom or crosshair modes</span
+          >
+        </v-tooltip>
+        <v-col v-for="tool in tools" :key="tool.id" cols="1" class="pt-0 pb-1">
           <slot :name="'btn-' + tool.id" :tool="tool" :selectTool="selectTool">
             <v-icon @click="selectTool(tool.id)">{{ tool.icon }}</v-icon>
           </slot>
@@ -115,13 +99,14 @@
   </v-card>
 </template>
 <script>
+import moment from 'moment'
 import {
   Vue,
   Component,
   Prop,
   Watch,
   Emit,
-  Model,
+  Model
 } from 'nuxt-property-decorator'
 import { jdToDate } from '../utils/AstroDates.js'
 @Component
@@ -138,14 +123,14 @@ export default class StampCard extends Vue {
       {
         id: 'zoom',
         text: 'Zoom',
-        icon: 'mdi-magnify-plus',
+        icon: 'mdi-magnify-plus'
       },
       {
         id: 'crosshair',
         text: 'Crosshair',
-        icon: 'mdi-crosshairs',
-      },
-    ],
+        icon: 'mdi-crosshairs'
+      }
+    ]
   })
   tools
 
@@ -264,8 +249,8 @@ export default class StampCard extends Vue {
     if (this.detections) {
       return this.detections.map((x, i) => {
         return {
-          date: jdToDate(x.mjd).toUTCString().slice(0, -3) + 'UT',
-          index: i,
+          date: moment.utc(jdToDate(x.mjd)).format('YYYY-MM-DD HH:mm:ss'),
+          index: i
         }
       })
     }
